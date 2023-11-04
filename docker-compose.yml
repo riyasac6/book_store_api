@@ -1,0 +1,56 @@
+version: "3"
+networks:
+  generic-network:
+    external:
+      name: generic-network
+volumes:
+  base-media:
+  base-static:
+services:
+  
+  base-postgres:
+    container_name: base-postgres
+    image: postgres
+    restart: always
+    env_file:
+      - ./services/.db_parameter
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes: 
+      - ./services/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./data:/var/lib/postgresql/data
+    command: 
+      postgres -c config_file=/etc/postgresql/postgresql.conf
+    networks:
+      - generic-network
+
+  base-django:
+    container_name: base-django 
+    build:
+      context: ./book_store
+    restart: always
+    volumes:
+      - base-media:/application/media
+      - base-static:/application/static
+      - ./book_store:/application
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./env/.django_env
+    command: 
+      python manage.py runserver 0:8000
+    depends_on:
+      - base-postgres
+    networks:
+      - generic-network
+
+  base-adminer:
+    container_name: base-adminer
+    image: adminer:4.7.6-standalone
+    restart: always
+    depends_on:
+      - base-postgres
+    ports:
+      - "8090:8080"
+    networks:
+      - generic-network

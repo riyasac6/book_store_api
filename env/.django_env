@@ -1,0 +1,13 @@
+SECRET_KEY=ok+-aq1qdnkz*te8so3ocfof15lx#i8c-%b&q6$&o71mf(n2xs
+ALLOWED_HOSTS=127.0.0.1,localhost
+DEBUG=True
+
+DATABASE_URL=psql://postgres:postgres@base-postgres:5432/book_store_db
+
+
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=developerriyas@gmail.com
+EMAIL_HOST_PASSWORD=lfhjfsldnfmbhmvd
+EMAIL_USE_TLS=True
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
