@@ -18,9 +18,6 @@ docker-compose -f docker-compose.yml down && docker-compose -f docker-compose.ym
 
 Postman Collection
 --------
-https://elements.getpostman.com/redirect?entityId=18979185-63aa8f09-9dd1-4bcb-bf30-3a92e90bcdcc&entityType=collection
-
-
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/18979185-63aa8f09-9dd1-4bcb-bf30-3a92e90bcdcc?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D18979185-63aa8f09-9dd1-4bcb-bf30-3a92e90bcdcc%26entityType%3Dcollection%26workspaceId%3Df1ce25d2-dc16-40d5-b166-703112d6cf66)
 
 
