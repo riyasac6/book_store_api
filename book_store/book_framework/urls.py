@@ -34,10 +34,19 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
+
+
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
+
+from books.models import Book   
+from books.serializers import BookListSerializer   
+class BookViewSet(viewsets.ModelViewSet):
+    queryset = Book.objects.filter(deleted=0).all()
+    serializer_class = BookListSerializer
+
+router.register(r'books', BookViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

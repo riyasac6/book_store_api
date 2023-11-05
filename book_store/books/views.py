@@ -18,12 +18,12 @@ class BookListView(generics.ListAPIView):
     
     def get_queryset(self):
         queryset = self.queryset.order_by('id')
-        author = self.request.query_params.get('author')
+        author = self.request.query_params.get('author_name')
         genre = self.request.query_params.get('genre')
         published_year = self.request.query_params.get('published_year')
 
         if author:
-            queryset = queryset.filter(author=author)
+            queryset = queryset.filter(author__full_name=author)
         if genre:
             queryset = queryset.filter(genre=genre)
         if published_year:
