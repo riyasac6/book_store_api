@@ -280,7 +280,7 @@ CREATE TABLE public.books_book (
     genre character varying(50) NOT NULL,
     published_date date NOT NULL,
     isbn character varying(50) NOT NULL,
-    deleted boolean,
+    deleted integer NOT NULL,
     deleted_at timestamp with time zone,
     author_id integer NOT NULL
 );
@@ -600,6 +600,7 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 --
 
 COPY public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) FROM stdin;
+1	pbkdf2_sha256$150000$0Iq2Eyz7Igf8$3vZFiaEzOF2K+SLoNlsS3yGT0EsQaHaXIZzloyj2XLA=	\N	t	superadmin			riyasac@mailinator.com	t	t	2023-11-05 02:10:12.582884+00
 \.
 
 
@@ -629,6 +630,7 @@ COPY public.books_author (id, full_name, nick_name, date_of_birth, nationality, 
 3	Joseph Rudyard Kipling	Rudyard	1865-12-30	British	United Services College	Nobel Prize
 4	Mohandas Karamchand Gandhi	Mahatma	1869-10-02	Indian	barrister	Man of the Year by Time Magazine
 5	Robert Lee Frost	Robert Frost	1874-03-26	American	Harvard University	Pulitzer Prizes
+6	J. K. Rowling	Jo Rowling	1965-07-31	British	University of Exeter	Legion of Honour
 \.
 
 
@@ -637,12 +639,13 @@ COPY public.books_author (id, full_name, nick_name, date_of_birth, nationality, 
 --
 
 COPY public.books_book (id, title, genre, published_date, isbn, deleted, deleted_at, author_id) FROM stdin;
-1	Romeo and Juliet	Tragedy	1597-01-01	9781586638450	\N	\N	1
-2	Macbeth	Tragedy	1606-01-01	1586638467	\N	\N	1
-3	Wings of Fire	Autobiography	1999-01-01	9788173711466	\N	\N	2
-4	The Jungle Book	Childrens Fiction	1894-01-01	8172344228	\N	\N	3
-5	Mahatma Gandhi: His Life and Ideas	Biography	1929-01-01	1683361822	\N	\N	4
-6	The Poetry of Robert Frost: The Collected Poems	Poetry	1969-01-01	9780805069860	\N	\N	5
+1	Romeo and Juliet	Tragedy	1597-01-01	9781586638450	0	\N	1
+3	Wings of Fire	Autobiography	1999-01-01	9788173711466	0	\N	2
+5	Mahatma Gandhi: His Life and Ideas	Biography	1929-01-01	1683361822	0	\N	4
+2	Macbeth	Tragedy	1606-01-01	1586638467	1	\N	1
+4	The Jungle Book	Childrens Fiction	1894-01-01	8172344228	1	\N	3
+6	The Poetry of Robert Frost: The Collected Poems	Poetry	1969-01-01	9780805069860	0	\N	5
+8	Harry Potter	Fantasy	1997-06-26	9781408855651	0	\N	6
 \.
 
 
@@ -656,6 +659,7 @@ COPY public.books_review (id, reviewer_name, content, rating, book_id) FROM stdi
 3	suhail	a collection of stories featuring Mowgli, a young boy raised by wolves in the jungle, and his adventures with various jungle animals. It explores themes of friendship, survival, and the wild.	4	4
 4	ashar	about Mahatma Gandhis life, philosophy, and role in Indias struggle for independence. 	4	5
 5	dileep	Mending Wall and The Road Not Taken. His poetry explores themes of nature, rural life, and the human condition.	5	6
+6	nasiya av	It explores themes of power, ambition, and the consequences of ones actions.	5	1
 \.
 
 
@@ -707,6 +711,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 16	auth	0011_update_proxy_permissions	2023-11-04 18:30:08.436187+00
 17	books	0001_initial	2023-11-04 18:30:08.47587+00
 18	sessions	0001_initial	2023-11-04 18:30:08.503594+00
+19	books	0002_auto_20231105_0220	2023-11-05 02:22:37.222628+00
 \.
 
 
@@ -750,7 +755,7 @@ SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
 -- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.auth_user_id_seq', 1, false);
+SELECT pg_catalog.setval('public.auth_user_id_seq', 1, true);
 
 
 --
@@ -764,21 +769,21 @@ SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
 -- Name: books_author_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.books_author_id_seq', 5, true);
+SELECT pg_catalog.setval('public.books_author_id_seq', 7, true);
 
 
 --
 -- Name: books_book_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.books_book_id_seq', 7, true);
+SELECT pg_catalog.setval('public.books_book_id_seq', 8, true);
 
 
 --
 -- Name: books_review_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.books_review_id_seq', 5, true);
+SELECT pg_catalog.setval('public.books_review_id_seq', 6, true);
 
 
 --
@@ -799,7 +804,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 9, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 18, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 19, true);
 
 
 --

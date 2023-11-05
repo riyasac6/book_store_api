@@ -13,11 +13,11 @@ from rest_framework.response import Response
 	* and pagination for large result sets. 
 """
 class BookListView(generics.ListAPIView):
-    queryset = Book.objects.all()
+    queryset = Book.objects.filter(deleted=0).all()
     serializer_class = BookListSerializer
     
     def get_queryset(self):
-        queryset = Book.objects.filter(deleted=False).all().order_by('id')
+        queryset = self.queryset.order_by('id')
         author = self.request.query_params.get('author')
         genre = self.request.query_params.get('genre')
         published_year = self.request.query_params.get('published_year')
@@ -55,7 +55,7 @@ class BookCreateView(generics.CreateAPIView):
             author_obj, created = Author.objects.get_or_create(full_name=author_name)
             book_data = request.data.copy()
             book_data['author'] = author_obj.id
-            book_data['deleted'] = False
+            book_data['deleted'] = 0
             serializer = self.get_serializer(data=book_data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
@@ -77,7 +77,7 @@ class UpdateBookView(generics.UpdateAPIView):
     serializer_class = UpdateBookSerializer
 
 class SoftDeleteBookView(generics.DestroyAPIView):
-    queryset = Book.objects.filter(deleted=False)
+    queryset = Book.objects.filter(deleted=0)
     serializer_class = BookSerializer
 
     def perform_destroy(self, instance):
@@ -85,7 +85,7 @@ class SoftDeleteBookView(generics.DestroyAPIView):
         return Response({"message": "Book soft deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
 class RestoreBookView(generics.UpdateAPIView):
-    queryset = Book.objects.filter(deleted=True).all()
+    queryset = Book.objects.filter(deleted=1).all()
     serializer_class = BookRestoreSerializer
     
     def perform_update(self, serializer):

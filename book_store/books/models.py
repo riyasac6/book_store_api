@@ -17,10 +17,10 @@ class SoftDeletionManager(models.Manager):
         super(SoftDeletionManager, self).__init__(*args, **kwargs)
 
     def soft_delete(self):
-        return self.update(deleted=True, deleted_at=timezone.now())
+        return self.update(deleted=1, deleted_at=timezone.now())
 
     def restore(self):
-        return self.update(deleted=False, deleted_at=None)
+        return self.update(deleted=0, deleted_at=None)
     
 class Book(models.Model):
     objects = SoftDeletionManager()
@@ -30,16 +30,16 @@ class Book(models.Model):
     genre = models.CharField(max_length=50)
     published_date = models.DateField()
     isbn = models.CharField(max_length=50, unique=True)
-    deleted = models.BooleanField(default=False, null=True, blank=True)
+    deleted = models.IntegerField(default=0)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
     def delete(self):
-        self.deleted = True
+        self.deleted = 1
         self.deleted_at = timezone.now()
         self.save()
 
     def undelete(self):
-        self.deleted = False
+        self.deleted = 0
         self.deleted_at = None
         self.save()
 
