@@ -26,5 +26,6 @@ Site Available URL:
 http://127.0.0.1:8000/api-auth/login/
 
 username : superadmin
+
 password : As@1234
 
