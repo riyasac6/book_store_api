@@ -1,8 +1,8 @@
-version: "3"
+# version: "3"
 networks:
-  generic-network:
-    external:
-      name: generic-network
+  base-network:
+    external: true
+    name: base-network
 volumes:
   base-media:
   base-static:
@@ -22,7 +22,7 @@ services:
     command: 
       postgres -c config_file=/etc/postgresql/postgresql.conf
     networks:
-      - generic-network
+      - base-network
 
   base-django:
     container_name: base-django 
@@ -42,7 +42,7 @@ services:
     depends_on:
       - base-postgres
     networks:
-      - generic-network
+      - base-network
 
   base-adminer:
     container_name: base-adminer
@@ -53,4 +53,4 @@ services:
     ports:
       - "8090:8080"
     networks:
-      - generic-network
+      - base-network
